@@ -3,10 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Barebones", group="Linear Opmode")
+@TeleOp(name="Teleop Mode", group="Linear Opmode")
 public class RobotTest extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftFront = null;
@@ -17,9 +16,9 @@ public class RobotTest extends LinearOpMode {
     private double leftBackPower;
     private double rightFrontPower;
     private double rightBackPower;
-    double drive;
-    double strafe;
-    double rotate;
+    private double drive;
+    private double strafe;
+    private double rotate;
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Initialized");
@@ -49,7 +48,7 @@ public class RobotTest extends LinearOpMode {
              * Right stick:
              * - strafing side to side
              * apparently you can face forward while moving in a circle
-             * by strafing and rotating at the same time xDDDDDDD
+             * by strafing and rotating at the same time
              */
             leftFrontPower = drive + strafe + rotate;
             leftBackPower = drive - strafe + rotate;
