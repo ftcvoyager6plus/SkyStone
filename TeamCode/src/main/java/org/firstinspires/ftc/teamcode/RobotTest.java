@@ -16,7 +16,7 @@ public class RobotTest extends LinearOpMode {
     private double leftBackPower;
     private double rightFrontPower;
     private double rightBackPower;
-    private double drive;
+    private double drive; //testing
     private double strafe;
     private double rotate;
     @Override
