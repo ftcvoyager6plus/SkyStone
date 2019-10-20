@@ -18,11 +18,18 @@ public class RobotTest extends LinearOpMode {
     private boolean button_b;
     private boolean button_du;
     private boolean button_dd;
+
     private static final double INCREMENT = 0.03;
     private static final int CYCLE_MS = 50;
     private static final double MAX_POS = 1.0;
     private static final double MIN_POS = 0.0;
     private double position = (MAX_POS - MIN_POS) / 2;
+
+    private static final double BINCREMENT = 0.03;
+    private static final int BCYCLE_MS = 50;
+    private static final double BMAX_POS = 1.0;
+    private static final double BMIN_POS = 0.0;
+    private double bposition = (BMAX_POS - BMIN_POS) / 2;
     VoyagerBot robot = new VoyagerBot();
     @Override
     public void runOpMode() {
@@ -52,10 +59,17 @@ public class RobotTest extends LinearOpMode {
                     position = MIN_POS;
                 }
             }
-            if(button_du) {
-                robot.back.setPosition(1);
-            } else if(button_dd) {
-                robot.back.setPosition(0);
+
+            if(button_dd) {
+                bposition += BINCREMENT;
+                if(bposition >= BMAX_POS) {
+                    bposition = BMAX_POS;
+                }
+            } else if(button_du) {
+                bposition -= BINCREMENT;
+                if (bposition <= BMIN_POS) {
+                    bposition = BMIN_POS;
+                }
             }
             /* * * * * * * * * * * *
              * Left stick:
@@ -75,6 +89,7 @@ public class RobotTest extends LinearOpMode {
             robot.leftBack.setPower(leftBackPower);
             robot.rightFront.setPower(rightFrontPower);
             robot.rightBack.setPower(rightBackPower);
+            robot.back.setPosition(bposition);
             robot.claw.setPosition(position);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());

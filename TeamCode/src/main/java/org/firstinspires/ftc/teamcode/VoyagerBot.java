@@ -12,11 +12,7 @@ public class VoyagerBot {
     public Servo claw = null;
     public Servo back = null;
     HardwareMap hwMap = null;
-
     public VoyagerBot() {
-
-    }
-    public void drive() {
 
     }
     public void resetEncoders() {
