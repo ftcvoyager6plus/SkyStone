@@ -11,7 +11,7 @@ public class VoyagerBot {
     public DcMotor rightBack = null;
     public Servo claw = null;
     public Servo back = null;
-    public Servo lift = null;
+    public DcMotor lift = null;
     HardwareMap hwMap = null;
     public VoyagerBot() {
 
@@ -35,6 +35,7 @@ public class VoyagerBot {
         rightBack = hwMap.get(DcMotor.class, "right_back");
         claw = hwMap.get(Servo.class, "claw");
         back = hwMap.get(Servo.class, "back");
+        lift = hwMap.get(DcMotor.class, "lift_motor");
 
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);

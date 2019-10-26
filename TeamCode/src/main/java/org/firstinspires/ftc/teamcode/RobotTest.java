@@ -18,6 +18,8 @@ public class RobotTest extends LinearOpMode {
     private boolean button_b;
     private boolean button_du;
     private boolean button_dd;
+    private boolean bumper_left;
+    private boolean bumper_right;
 
     private static final double INCREMENT = 0.03;
     private static final int CYCLE_MS = 50;
@@ -48,6 +50,18 @@ public class RobotTest extends LinearOpMode {
             button_b = gamepad1.b;
             button_du = gamepad1.dpad_up;
             button_dd = gamepad1.dpad_down;
+            bumper_left = gamepad1.left_bumper;
+            bumper_right = gamepad1.right_bumper;
+            if(bumper_left) {
+                robot.lift.setPower(0.6);
+            } else {
+                robot.lift.setPower(0);
+            }
+            if(bumper_right) {
+                robot.lift.setPower(-0.5);
+            } else {
+                robot.lift.setPower(0);
+            }
             if(button_a) {
                 position += INCREMENT;
                 if(position >= MAX_POS) {
