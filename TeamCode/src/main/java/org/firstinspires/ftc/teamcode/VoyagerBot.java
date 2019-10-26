@@ -11,6 +11,7 @@ public class VoyagerBot {
     public DcMotor rightBack = null;
     public Servo claw = null;
     public Servo back = null;
+    public Servo lift = null;
     HardwareMap hwMap = null;
     public VoyagerBot() {
 
