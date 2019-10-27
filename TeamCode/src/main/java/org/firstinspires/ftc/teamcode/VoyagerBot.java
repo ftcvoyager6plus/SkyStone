@@ -52,7 +52,7 @@ public class VoyagerBot {
         rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        claw.setPosition(0);
-        back.setPosition(0);
+        //claw.setPosition(0);
+        //back.setPosition(0);
     }
 }
