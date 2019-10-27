@@ -52,10 +52,13 @@ public class AutonomousMode extends LinearOpMode {
             telemetry.addData("Path1",  "Motor Powers %d %d %d %d", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
             telemetry.update();
         }
-        robot.leftFront.setPower(0);
-        robot.leftBack.setPower(0);
-        robot.rightFront.setPower(0);
-        robot.rightBack.setPower(0);
+        while (speed  > 0) {
+            speed -= 0.2
+            robot.leftFront.setPower(Math.abs(speed));
+            robot.leftBack.setPower(Math.abs(speed));
+            robot.rightFront.setPower(Math.abs(speed));
+            robot.rightBack.setPower(Math.abs(speed));
+        }
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
