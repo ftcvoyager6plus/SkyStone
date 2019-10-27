@@ -45,7 +45,7 @@ public class RobotTest extends LinearOpMode {
         while(opModeIsActive()) {
             drive = -gamepad1.left_stick_y; //forward and backward
             strafe = 0.90 * gamepad1.right_stick_x; // side to side and diagonal
-            rotate = gamepad1.left_stick_x; // rotate in place
+            rotate = 0.90 * gamepad1.left_stick_x; // rotate in place
             button_a = gamepad1.a;
             button_b = gamepad1.b;
             button_du = gamepad1.dpad_up;
@@ -53,12 +53,12 @@ public class RobotTest extends LinearOpMode {
             bumper_left = gamepad1.left_bumper;
             bumper_right = gamepad1.right_bumper;
             if(bumper_left) {
-                robot.lift.setPower(0.6);
+                robot.lift.setPower(0.8);
             } else {
                 robot.lift.setPower(0);
             }
             if(bumper_right) {
-                robot.lift.setPower(-0.5);
+                robot.lift.setPower(-0.6);
             } else {
                 robot.lift.setPower(0);
             }

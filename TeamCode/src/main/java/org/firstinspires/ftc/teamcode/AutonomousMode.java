@@ -21,7 +21,6 @@ public class AutonomousMode extends LinearOpMode {
         robot.resetEncoders();
         waitForStart();
         autoDrive(0.6, 12, 0, 0, 10);
-
     }
     public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
         int drive = (int)(driveInches * COUNTS_PER_INCH);
@@ -49,7 +48,7 @@ public class AutonomousMode extends LinearOpMode {
         robot.rightBack.setPower(Math.abs(speed));
 
         while(opModeIsActive() && (runtime.seconds() < timeout) && (robot.leftFront.isBusy() && robot.leftBack.isBusy() && robot.rightFront.isBusy() && robot.rightBack.isBusy())) {
-            telemetry.addData("Path1",  "Running to %7d :%7d %7d", drive,  strafe, rotate);
+            telemetry.addData("Path1",  "Motor Powers %d %d %d %d", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
             telemetry.update();
         }
         robot.leftFront.setPower(0);
