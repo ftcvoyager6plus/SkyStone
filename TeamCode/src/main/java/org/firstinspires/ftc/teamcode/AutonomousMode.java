@@ -20,8 +20,8 @@ public class AutonomousMode extends LinearOpMode {
         telemetry.update();
         robot.resetEncoders();
         waitForStart();
-        autoDrive(0.6, 12, 0, 0, 20);
-        autoDrive(0.6, 0, 0, 30, 20);
+        autoDrive(0.6, -12, 0, 0, 20);
+        //autoDrive(0.6, 0, 0, 30, 20);
     }
     public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
         int drive = (int)(driveInches * COUNTS_PER_INCH);
@@ -52,12 +52,13 @@ public class AutonomousMode extends LinearOpMode {
             telemetry.addData("Path1",  "Motor Powers %d %d %d %d", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
             telemetry.update();
         }
-        while (speed  > 0) {
-            speed -= 0.2
+        while(speed > 0) {
+            speed -= 0.05;
             robot.leftFront.setPower(Math.abs(speed));
             robot.leftBack.setPower(Math.abs(speed));
             robot.rightFront.setPower(Math.abs(speed));
             robot.rightBack.setPower(Math.abs(speed));
+            sleep(25);
         }
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
