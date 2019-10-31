@@ -20,7 +20,7 @@ public class AutonomousMode extends LinearOpMode {
         telemetry.update();
         robot.resetEncoders();
         waitForStart();
-        autoDrive(0.6, -12, 0, 0, 20);
+        autoDrive(0.2, -12, 0, 0, 20);
         //autoDrive(0.6, 0, 0, 30, 20);
     }
     public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
