@@ -53,6 +53,6 @@ public class VoyagerBot {
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         claw.setPosition(0);
-        back.setPosition(1);
+        back.setPosition(0);
     }
 }

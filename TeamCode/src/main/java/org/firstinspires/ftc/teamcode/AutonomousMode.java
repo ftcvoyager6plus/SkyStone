@@ -11,8 +11,8 @@ public class AutonomousMode extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 134.4;
     static final double DRIVE_GEAR_REDUCTION = 19.2;
-    static final double WHEEL_DIAMETER_INCHES = 10 / 2.54;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double WHEEL_RADIUS_INCHES = 10 / 2.54;
+    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (2 * WHEEL_RADIUS_INCHES * Math.PI);
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
@@ -20,7 +20,7 @@ public class AutonomousMode extends LinearOpMode {
         telemetry.update();
         robot.resetEncoders();
         waitForStart();
-        autoDrive(0.2, -12, 0, 0, 20);
+        robot.back.setPosition(1);
         //autoDrive(0.6, 0, 0, 30, 20);
     }
     public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
@@ -58,7 +58,6 @@ public class AutonomousMode extends LinearOpMode {
             robot.leftBack.setPower(Math.abs(speed));
             robot.rightFront.setPower(Math.abs(speed));
             robot.rightBack.setPower(Math.abs(speed));
-            sleep(25);
         }
 
         robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
