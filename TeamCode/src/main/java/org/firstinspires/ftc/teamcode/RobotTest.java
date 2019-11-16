@@ -20,6 +20,7 @@ public class RobotTest extends LinearOpMode {
     private boolean button_dd;
     private boolean bumper_left;
     private boolean bumper_right;
+    private boolean button_left;
 
     private static final double INCREMENT = 0.03;
     private static final int CYCLE_MS = 50;
@@ -28,10 +29,15 @@ public class RobotTest extends LinearOpMode {
     private double position = (MAX_POS - MIN_POS) / 2;
 
     private static final double BINCREMENT = 0.03;
-    private static final int BCYCLE_MS = 50;
     private static final double BMAX_POS = 1.0;
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
+
+    private static final double CINCREMENT = 0.03;
+    private static final double CMAX_POS = 1.0;
+    private static final double CMIN_POS = 0.0;
+    private double cposition = CMIN_POS;
+
     VoyagerBot robot = new VoyagerBot();
     @Override
     public void runOpMode() {
@@ -52,6 +58,7 @@ public class RobotTest extends LinearOpMode {
             button_dd = gamepad1.dpad_down;
             bumper_left = gamepad1.left_bumper;
             bumper_right = gamepad1.right_bumper;
+            button_left = gamepad1.dpad_left;
             if(bumper_left) {
                 robot.lift.setPower(0.8);
             } else {
@@ -85,6 +92,13 @@ public class RobotTest extends LinearOpMode {
                     bposition = BMIN_POS;
                 }
             }
+
+            if(button_left) {
+                cposition += CINCREMENT;
+                if(cposition >= CMAX_POS) {
+                    cposition = CMAX_POS;
+                }
+            }
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
@@ -105,9 +119,11 @@ public class RobotTest extends LinearOpMode {
             robot.rightBack.setPower(rightBackPower);
             robot.back.setPosition(bposition);
             robot.claw.setPosition(position);
+            robot.extension.setPosition(cposition);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left front (%.2f), left back (%.2f), right front (%.2f), right back (%.2f)", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
+            telemetry.addData("Extension", "Extension: (%.2f)", cposition);
             telemetry.update();
         }
     }
