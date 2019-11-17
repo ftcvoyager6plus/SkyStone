@@ -34,10 +34,10 @@ public class RobotTest extends LinearOpMode {
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
 
-    private static final double CINCREMENT = 0.03;
+    /*private static final double CINCREMENT = 0.03;
     private static final double CMAX_POS = 0.8;
     private static final double CMIN_POS = 0.7;
-    private double cposition = (0.4);
+    private double cposition = (0.4);*/
 
     VoyagerBot robot = new VoyagerBot();
     @Override
@@ -82,11 +82,11 @@ public class RobotTest extends LinearOpMode {
                     position = MIN_POS;
                 }
             }
-            if(button_dr) {
+            /*if(button_dr) {
                 cposition = 0.8;
             } else if(button_dl) {
                 cposition = 0.7;
-            }
+            }*/
             if(button_dd) {
                 bposition += BINCREMENT;
                 if(bposition >= BMAX_POS) {
@@ -119,10 +119,10 @@ public class RobotTest extends LinearOpMode {
             robot.rightBack.setPower(rightBackPower);
             robot.back.setPosition(bposition);
             robot.claw.setPosition(position);
-            robot.skystone.setPosition(cposition);
+            //robot.skystone.setPosition(cposition);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("StoneServo",cposition);
+            //telemetry.addData("StoneServo",cposition);
             telemetry.addData("Motors", "left front (%.2f), left back (%.2f), right front (%.2f), right back (%.2f)", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
             telemetry.update();
         }
