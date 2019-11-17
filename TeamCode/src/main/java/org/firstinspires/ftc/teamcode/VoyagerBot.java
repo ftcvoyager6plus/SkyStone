@@ -28,7 +28,6 @@ public class VoyagerBot {
         this.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         this.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

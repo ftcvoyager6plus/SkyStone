@@ -25,17 +25,17 @@ public class AutonomousMode extends LinearOpMode {
         /*robot.drive(-0.4, 1000);
         robot.turn(0.6,1000);
         robot.strafe(0.4,500);*/
-        drive(0.6, 48);
+        drive(0.6,60);
         /*autoDrive(0.3, -20, 0, 0, 20);
         autoDrive(0.3, 0, 10, 0, 20);*/
     }
-    public void drive(double speed, double inches) {
+    private void drive(double speed, double inches) {
         int timeout = 20;
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
-        leftFrontTarget = robot.leftFront.getCurrentPosition() + (int)(inches);
-        leftBackTarget = robot.leftBack.getCurrentPosition() + (int)(inches);
-        rightFrontTarget = robot.rightFront.getCurrentPosition() + (int)(inches);
-        rightBackTarget = robot.rightBack.getCurrentPosition() + (int)(inches);
+        leftFrontTarget = robot.leftFront.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+        leftBackTarget = robot.leftBack.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+        rightFrontTarget = robot.rightFront.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+        rightBackTarget = robot.rightBack.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
         robot.leftFront.setTargetPosition(leftFrontTarget);
         robot.leftBack.setTargetPosition(leftBackTarget);
         robot.rightFront.setTargetPosition(rightFrontTarget);
