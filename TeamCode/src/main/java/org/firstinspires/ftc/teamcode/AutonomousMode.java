@@ -22,10 +22,42 @@ public class AutonomousMode extends LinearOpMode {
         waitForStart();
         robot.back.setPosition(1);
         // 36 rotates 180*
-        autoDrive(0.3, -20, 0, 0, 20);
-        autoDrive(0.3, 0, 10, 0, 20);
+        /*robot.drive(-0.4, 1000);
+        robot.turn(0.6,1000);
+        robot.strafe(0.4,500);*/
+        drive(0.6, 48);
+        /*autoDrive(0.3, -20, 0, 0, 20);
+        autoDrive(0.3, 0, 10, 0, 20);*/
     }
-    public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
+    public void drive(double speed, double inches) {
+        int timeout = 20;
+        int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
+        leftFrontTarget = robot.leftFront.getCurrentPosition() + (int)(inches);
+        leftBackTarget = robot.leftBack.getCurrentPosition() + (int)(inches);
+        rightFrontTarget = robot.rightFront.getCurrentPosition() + (int)(inches);
+        rightBackTarget = robot.rightBack.getCurrentPosition() + (int)(inches);
+        robot.leftFront.setTargetPosition(leftFrontTarget);
+        robot.leftBack.setTargetPosition(leftBackTarget);
+        robot.rightFront.setTargetPosition(rightFrontTarget);
+        robot.rightBack.setTargetPosition(rightBackTarget);
+        runtime.reset();
+        robot.leftFront.setPower(Math.abs(speed));
+        robot.leftBack.setPower(Math.abs(speed));
+        robot.rightFront.setPower(Math.abs(speed));
+        robot.rightBack.setPower(Math.abs(speed));
+        while(opModeIsActive() && (runtime.seconds() < timeout) && (robot.leftFront.isBusy() && robot.leftBack.isBusy() && robot.rightFront.isBusy() && robot.rightBack.isBusy())) {
+            telemetry.addData("Running", "Running");
+        }
+        robot.leftFront.setPower(0);
+        robot.leftBack.setPower(0);
+        robot.rightFront.setPower(0);
+        robot.rightBack.setPower(0);
+        robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+    /*public void autoDrive(double speed, double driveInches, double strafeInches, double rotateInches, double timeout) {
         int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
         int drive = (int)(driveInches * COUNTS_PER_INCH);
         int rotate = (int)(rotateInches * COUNTS_PER_INCH);
@@ -71,5 +103,5 @@ public class AutonomousMode extends LinearOpMode {
             robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
         sleep(250);
-    }
+    }*/
 }

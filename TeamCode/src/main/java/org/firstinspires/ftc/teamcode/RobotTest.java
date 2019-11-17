@@ -20,7 +20,8 @@ public class RobotTest extends LinearOpMode {
     private boolean button_dd;
     private boolean bumper_left;
     private boolean bumper_right;
-    private boolean button_left;
+    private boolean button_dl;
+    private boolean button_dr;
 
     private static final double INCREMENT = 0.03;
     private static final int CYCLE_MS = 50;
@@ -34,9 +35,9 @@ public class RobotTest extends LinearOpMode {
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
 
     private static final double CINCREMENT = 0.03;
-    private static final double CMAX_POS = 1.0;
-    private static final double CMIN_POS = 0.0;
-    private double cposition = CMIN_POS;
+    private static final double CMAX_POS = 0.8;
+    private static final double CMIN_POS = 0.7;
+    private double cposition = (0.4);
 
     VoyagerBot robot = new VoyagerBot();
     @Override
@@ -56,9 +57,10 @@ public class RobotTest extends LinearOpMode {
             button_b = gamepad1.b;
             button_du = gamepad1.dpad_up;
             button_dd = gamepad1.dpad_down;
+            button_dl = gamepad1.dpad_left;
+            button_dr = gamepad2.dpad_right;
             bumper_left = gamepad1.left_bumper;
             bumper_right = gamepad1.right_bumper;
-            button_left = gamepad1.dpad_left;
             if(bumper_left) {
                 robot.lift.setPower(0.8);
             } else {
@@ -80,7 +82,11 @@ public class RobotTest extends LinearOpMode {
                     position = MIN_POS;
                 }
             }
-
+            if(button_dr) {
+                cposition = 0.8;
+            } else if(button_dl) {
+                cposition = 0.7;
+            }
             if(button_dd) {
                 bposition += BINCREMENT;
                 if(bposition >= BMAX_POS) {
@@ -93,12 +99,6 @@ public class RobotTest extends LinearOpMode {
                 }
             }
 
-            if(button_left) {
-                cposition += CINCREMENT;
-                if(cposition >= CMAX_POS) {
-                    cposition = CMAX_POS;
-                }
-            }
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
@@ -119,11 +119,11 @@ public class RobotTest extends LinearOpMode {
             robot.rightBack.setPower(rightBackPower);
             robot.back.setPosition(bposition);
             robot.claw.setPosition(position);
-            robot.extension.setPosition(cposition);
+            robot.skystone.setPosition(cposition);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("StoneServo",cposition);
             telemetry.addData("Motors", "left front (%.2f), left back (%.2f), right front (%.2f), right back (%.2f)", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
-            telemetry.addData("Extension", "Extension: (%.2f)", cposition);
             telemetry.update();
         }
     }
