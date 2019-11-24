@@ -23,24 +23,19 @@ public class AutonomousMode5 extends LinearOpMode {
         strafe(0.4, -30.5);
         robot.skystone.setPosition(0);
         sleep(500);
-        strafe(0.7,11);
-        drive(0.7, -52);
+        strafe(0.5,12);
+        drive(0.6, -52);
         robot.skystone.setPosition(1);
         sleep(500);
-        drive(0.7,42.5);
-        strafe(0.6,-11);
+        drive(0.6,44);
+        strafe(0.5,-13);
         robot.skystone.setPosition(0);
         sleep(500);
-        strafe(0.6,11);
-        drive(0.7,-42.5);
+        strafe(0.5,13);
+        drive(0.6,-44);
         robot.skystone.setPosition(1);
         sleep(400);
-        drive(0.7,57);
-        strafe(0.6,-11);
-        robot.skystone.setPosition(0);
-        sleep(500);
-        strafe(0.6,11);
-        drive(0.7,-57);
+        drive(0.5,15);
     }
     private void drive(double speed, double inches) {
         inches = inches * 24 / 59;
@@ -80,7 +75,7 @@ public class AutonomousMode5 extends LinearOpMode {
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        sleep(200);
+        sleep(250);
     }
     private void strafe(double speed, double inches) {
         inches = inches * 24 / 55;
@@ -120,7 +115,7 @@ public class AutonomousMode5 extends LinearOpMode {
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        sleep(200);
+        sleep(250);
     }
     private void turn(double speed, double degrees) {
         double inches = degrees * 35.6 / 360;
@@ -160,6 +155,6 @@ public class AutonomousMode5 extends LinearOpMode {
             robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        sleep(200);
+        sleep(250);
     }
 }
