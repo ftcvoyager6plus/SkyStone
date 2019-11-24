@@ -12,7 +12,7 @@ public class VoyagerBot {
     public DcMotor rightBack = null;
     public Servo claw = null;
     public Servo back = null;
-    //public Servo skystone = null;
+    public Servo skystone = null;
     public DcMotor lift = null;
     HardwareMap hwMap = null;
     private ElapsedTime runtime = new ElapsedTime();
@@ -43,7 +43,7 @@ public class VoyagerBot {
         back = hwMap.get(Servo.class, "back");
         lift = hwMap.get(DcMotor.class, "lift_motor");
         //extension = hwMap.get(Servo.class, "extension");
-        //skystone = hwMap.get(Servo.class, "stone");
+        skystone = hwMap.get(Servo.class, "stone");
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
@@ -62,69 +62,6 @@ public class VoyagerBot {
         claw.setPosition(0);
         back.setPosition(0);
         //extension.setPosition(0);
-        //skystone.setPosition(0);
-    }
-    @Deprecated
-    public void drive(double speed, int time) {
-        this.leftFront.setPower(speed);
-        this.leftBack.setPower(speed);
-        this.rightFront.setPower(speed);
-        this.rightBack.setPower(speed);
-        try {
-            Thread.sleep(time);
-        } catch(InterruptedException e) {
-
-        }
-        this.leftFront.setPower(0);
-        this.leftBack.setPower(0);
-        this.rightFront.setPower(0);
-        this.rightBack.setPower(0);
-        try {
-            Thread.sleep(350);
-        } catch(InterruptedException e) {
-
-        }
-    }
-    @Deprecated
-    public void turn(double speed, int time) {
-        this.leftFront.setPower(speed);
-        this.leftBack.setPower(speed);
-        this.rightFront.setPower(-speed);
-        this.rightBack.setPower(-speed);
-        try {
-            Thread.sleep(time);
-        } catch(InterruptedException e) {
-
-        }
-        this.leftFront.setPower(0);
-        this.leftBack.setPower(0);
-        this.rightFront.setPower(0);
-        this.rightBack.setPower(0);
-        try {
-            Thread.sleep(350);
-        } catch(InterruptedException e) {
-
-        }
-    }
-    @Deprecated
-    public void strafe(double speed, int time) {
-        this.leftFront.setPower(speed);
-        this.leftBack.setPower(-speed);
-        this.rightFront.setPower(-speed);
-        this.rightBack.setPower(speed);
-        try {
-            Thread.sleep(time);
-        } catch(InterruptedException e) {
-
-        }
-        this.leftFront.setPower(0);
-        this.leftBack.setPower(0);
-        this.rightFront.setPower(0);
-        this.rightBack.setPower(0);
-        try {
-            Thread.sleep(350);
-        } catch(InterruptedException e) {
-
-        }
+        skystone.setPosition(1);
     }
 }

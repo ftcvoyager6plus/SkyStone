@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Right: Buildplate Wall", group="Autonomous")
-public class AutonomousMode3 extends LinearOpMode {
+@Autonomous(name="Left: Random Skystones", group="Autonomous")
+public class AutonomousMode5 extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 134.4;
@@ -20,24 +20,27 @@ public class AutonomousMode3 extends LinearOpMode {
         telemetry.update();
         robot.resetEncoders();
         waitForStart();
-        robot.back.setPosition(1);
-        //drive(0.6,-24);
-        //strafe(0.6, 24);
-        // 35.6 "units" is exactly 360 degrees
-        robot.back.setPosition(0);
-        drive(0.6, -20);
-        strafe(0.4, -9);
-        drive(0.1, -12);
-        robot.back.setPosition(1);
-        sleep(1000);
-        drive(0.3, 33);
-        turn(0.1,30);
-        robot.back.setPosition(0);
+        strafe(0.4, -30.5);
+        robot.skystone.setPosition(0);
         sleep(500);
-        strafe(0.3,48);
-        turn(0.3,-25);
-        drive(0.3,23);
-        //autoDrive(0.2, -12, 0, 0, 20);
+        strafe(0.7,11);
+        drive(0.7, -52);
+        robot.skystone.setPosition(1);
+        sleep(500);
+        drive(0.7,42.5);
+        strafe(0.6,-11);
+        robot.skystone.setPosition(0);
+        sleep(500);
+        strafe(0.6,11);
+        drive(0.7,-42.5);
+        robot.skystone.setPosition(1);
+        sleep(400);
+        drive(0.7,57);
+        strafe(0.6,-11);
+        robot.skystone.setPosition(0);
+        sleep(500);
+        strafe(0.6,11);
+        drive(0.7,-57);
     }
     private void drive(double speed, double inches) {
         inches = inches * 24 / 59;

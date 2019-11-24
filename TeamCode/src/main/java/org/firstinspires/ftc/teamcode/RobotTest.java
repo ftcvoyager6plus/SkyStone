@@ -34,10 +34,10 @@ public class RobotTest extends LinearOpMode {
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
 
-    /*private static final double CINCREMENT = 0.03;
+    private static final double CINCREMENT = 0.03;
     private static final double CMAX_POS = 0.8;
     private static final double CMIN_POS = 0.7;
-    private double cposition = (0.4);*/
+    private double cposition = (0.4);
 
     VoyagerBot robot = new VoyagerBot();
     @Override
@@ -58,11 +58,11 @@ public class RobotTest extends LinearOpMode {
             button_du = gamepad1.dpad_up;
             button_dd = gamepad1.dpad_down;
             button_dl = gamepad1.dpad_left;
-            button_dr = gamepad2.dpad_right;
+            button_dr = gamepad1.dpad_right;
             bumper_left = gamepad1.left_bumper;
             bumper_right = gamepad1.right_bumper;
             if(bumper_left) {
-                robot.lift.setPower(0.8);
+                robot.lift.setPower(0.9);
             } else {
                 robot.lift.setPower(0);
             }
@@ -82,11 +82,11 @@ public class RobotTest extends LinearOpMode {
                     position = MIN_POS;
                 }
             }
-            /*if(button_dr) {
-                cposition = 0.8;
+            if(button_dr) {
+                cposition += CINCREMENT;
             } else if(button_dl) {
-                cposition = 0.7;
-            }*/
+                cposition -= CINCREMENT;
+            }
             if(button_dd) {
                 bposition += BINCREMENT;
                 if(bposition >= BMAX_POS) {
@@ -119,7 +119,7 @@ public class RobotTest extends LinearOpMode {
             robot.rightBack.setPower(rightBackPower);
             robot.back.setPosition(bposition);
             robot.claw.setPosition(position);
-            //robot.skystone.setPosition(cposition);
+            robot.skystone.setPosition(cposition);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("StoneServo",cposition);

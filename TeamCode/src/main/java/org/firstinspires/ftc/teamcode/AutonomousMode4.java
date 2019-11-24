@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Right: Buildplate Wall", group="Autonomous")
-public class AutonomousMode3 extends LinearOpMode {
+@Autonomous(name="Right: Buildplate Skybridge", group="Autonomous")
+public class AutonomousMode4 extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 134.4;
@@ -36,7 +36,7 @@ public class AutonomousMode3 extends LinearOpMode {
         sleep(500);
         strafe(0.3,48);
         turn(0.3,-25);
-        drive(0.3,23);
+        drive(0.3,-7);
         //autoDrive(0.2, -12, 0, 0, 20);
     }
     private void drive(double speed, double inches) {
