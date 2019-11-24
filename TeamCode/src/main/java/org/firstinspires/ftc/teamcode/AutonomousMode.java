@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Buildplate Wall", group="Autonomous")
+@Autonomous(name="Left: Buildplate Wall", group="Autonomous")
 public class AutonomousMode extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
     private ElapsedTime runtime = new ElapsedTime();
