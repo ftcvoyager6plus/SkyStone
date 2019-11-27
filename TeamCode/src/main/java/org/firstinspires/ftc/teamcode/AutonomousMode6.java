@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Left: Random Skystones", group="Autonomous")
-public class AutonomousMode5 extends LinearOpMode {
+@Autonomous(name="Right: Random Skystones", group="Autonomous")
+public class AutonomousMode6 extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 134.4;
@@ -20,22 +20,23 @@ public class AutonomousMode5 extends LinearOpMode {
         telemetry.update();
         robot.resetEncoders();
         waitForStart();
-        strafe(0.4, -30.5);
+        strafe(0.4,-30.5);
         robot.skystone.setPosition(0);
         sleep(500);
         strafe(0.5,12);
-        drive(0.6, -52);
+        drive(0.6, 52);
         robot.skystone.setPosition(1);
         sleep(500);
-        drive(0.6,44);
+        drive(0.6,-44);
         strafe(0.5,-13);
         robot.skystone.setPosition(0);
         sleep(500);
         strafe(0.5,13);
-        drive(0.6,-44);
+        drive(0.6,44);
         robot.skystone.setPosition(1);
-        sleep(400);
-        drive(0.5,15);;
+        sleep(500);
+        drive(0.5,-15);
+
     }
     private void drive(double speed, double inches) {
         inches = inches * 24 / 59;

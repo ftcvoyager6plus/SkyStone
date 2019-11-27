@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-@TeleOp(name="Teleop 2P", group="Linear Opmode")
-public class RobotTest extends LinearOpMode {
+@TeleOp(name="Teleop 1P", group="Linear Opmode")
+public class Teleop1P extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private double leftFrontPower;
     private double leftBackPower;
@@ -53,14 +53,14 @@ public class RobotTest extends LinearOpMode {
             drive = -gamepad1.left_stick_y; //forward and backward
             strafe = 0.90 * gamepad1.right_stick_x; // side to side and diagonal
             rotate = 0.85 * gamepad1.left_stick_x; // rotate in place
-            button_a = gamepad2.a;
-            button_b = gamepad2.b;
+            button_a = gamepad1.a;
+            button_b = gamepad1.b;
             button_du = gamepad1.dpad_up;
             button_dd = gamepad1.dpad_down;
             button_dl = gamepad1.dpad_left;
             button_dr = gamepad1.dpad_right;
-            bumper_left = gamepad2.left_bumper;
-            bumper_right = gamepad2.right_bumper;
+            bumper_left = gamepad1.left_bumper;
+            bumper_right = gamepad1.right_bumper;
             if(bumper_left) {
                 robot.lift.setPower(0.9);
             } else {
