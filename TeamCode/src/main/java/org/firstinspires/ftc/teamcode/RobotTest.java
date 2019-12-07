@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Teleop 2P", group="Linear Opmode")
@@ -20,8 +21,6 @@ public class RobotTest extends LinearOpMode {
     private boolean button_dd;
     private boolean bumper_left;
     private boolean bumper_right;
-    private boolean button_dl;
-    private boolean button_dr;
 
     private static final double INCREMENT = 0.03;
     private static final int CYCLE_MS = 50;
@@ -34,11 +33,16 @@ public class RobotTest extends LinearOpMode {
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
 
-    private static final double CINCREMENT = 0.03;
-    private static final double CMAX_POS = 0.8;
-    private static final double CMIN_POS = 0.7;
+    private static final double CINCREMENT = 0.06;
+    private static final double CMAX_POS = 1.0;
+    private static final double CMIN_POS = 0.0;
     private double cposition = (0.4);
 
+    private static final double DINCREMENT = 0.03;
+    private static final double DMAX_POS = 1.0;
+    private static final double DMIN_POS = 0.0;
+    private double dposition = (0.5);
+    private boolean halfspeed = false;
     VoyagerBot robot = new VoyagerBot();
     @Override
     public void runOpMode() {
@@ -51,23 +55,26 @@ public class RobotTest extends LinearOpMode {
 
         while(opModeIsActive()) {
             drive = -gamepad1.left_stick_y; //forward and backward
-            strafe = 0.90 * gamepad1.right_stick_x; // side to side and diagonal
+            strafe = 0.80 * gamepad1.right_stick_x; // side to side and diagonal
             rotate = 0.85 * gamepad1.left_stick_x; // rotate in place
             button_a = gamepad2.a;
             button_b = gamepad2.b;
             button_du = gamepad1.dpad_up;
             button_dd = gamepad1.dpad_down;
-            button_dl = gamepad1.dpad_left;
-            button_dr = gamepad1.dpad_right;
             bumper_left = gamepad2.left_bumper;
             bumper_right = gamepad2.right_bumper;
+            if(gamepad1.right_bumper) {
+                rotate = 0.5 * rotate;
+                drive = 0.5 * drive;
+                strafe = 0.5 * strafe;
+            }
             if(bumper_left) {
-                robot.lift.setPower(0.9);
+                robot.lift.setPower(1);
             } else {
                 robot.lift.setPower(0);
             }
             if(bumper_right) {
-                robot.lift.setPower(-0.6);
+                robot.lift.setPower(-1);
             } else {
                 robot.lift.setPower(0);
             }
@@ -82,10 +89,16 @@ public class RobotTest extends LinearOpMode {
                     position = MIN_POS;
                 }
             }
-            if(button_dr) {
+            if(gamepad1.dpad_right) {
                 cposition += CINCREMENT;
-            } else if(button_dl) {
+                if(cposition >= CMAX_POS) {
+                    cposition = CMAX_POS;
+                }
+            } else if(gamepad1.dpad_left) {
                 cposition -= CINCREMENT;
+                if (cposition <= CMIN_POS) {
+                    cposition = CMIN_POS;
+                }
             }
             if(button_dd) {
                 bposition += BINCREMENT;
@@ -98,7 +111,16 @@ public class RobotTest extends LinearOpMode {
                     bposition = BMIN_POS;
                 }
             }
-
+            if(gamepad2.dpad_up) {
+                robot.extension.setPower(0.5);
+            } else {
+                robot.extension.setPower(0);
+            }
+            if(gamepad2.dpad_down) {
+                robot.extension.setPower(-0.5);
+            } else {
+                robot.extension.setPower(0);
+            }
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards

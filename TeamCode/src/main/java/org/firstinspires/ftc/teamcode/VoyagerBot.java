@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -15,6 +16,7 @@ public class VoyagerBot {
     public Servo skystone = null;
     public DcMotor lift = null;
     HardwareMap hwMap = null;
+    public CRServo extension = null;
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 537.6;
     static final double DRIVE_GEAR_REDUCTION = 19.2;
@@ -42,6 +44,7 @@ public class VoyagerBot {
         claw = hwMap.get(Servo.class, "claw");
         back = hwMap.get(Servo.class, "back");
         lift = hwMap.get(DcMotor.class, "lift_motor");
+        extension = hwMap.get(CRServo.class, "extension");
         //extension = hwMap.get(Servo.class, "extension");
         skystone = hwMap.get(Servo.class, "stone");
         leftFront.setDirection(DcMotor.Direction.FORWARD);
@@ -61,7 +64,8 @@ public class VoyagerBot {
 
         claw.setPosition(0);
         back.setPosition(0);
-        //extension.setPosition(0);
+        extension.setPower(0);
+        extension.setPower(0);
         skystone.setPosition(1);
     }
 }

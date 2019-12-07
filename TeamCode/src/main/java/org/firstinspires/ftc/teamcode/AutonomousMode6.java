@@ -27,7 +27,7 @@ public class AutonomousMode6 extends LinearOpMode {
         drive(0.6, 52);
         robot.skystone.setPosition(1);
         sleep(500);
-        drive(0.6,-44);
+        drive(0.6,-43);
         strafe(0.5,-13);
         robot.skystone.setPosition(0);
         sleep(500);
@@ -35,7 +35,8 @@ public class AutonomousMode6 extends LinearOpMode {
         drive(0.6,44);
         robot.skystone.setPosition(1);
         sleep(500);
-        drive(0.5,-15);
+        drive(0.5,-16.5);
+        strafe(0.3,-15);
 
     }
     private void drive(double speed, double inches) {

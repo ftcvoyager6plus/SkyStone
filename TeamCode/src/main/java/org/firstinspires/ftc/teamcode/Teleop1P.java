@@ -34,9 +34,9 @@ public class Teleop1P extends LinearOpMode {
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
 
-    private static final double CINCREMENT = 0.03;
-    private static final double CMAX_POS = 0.8;
-    private static final double CMIN_POS = 0.7;
+    private static final double CINCREMENT = 0.06;
+    private static final double CMAX_POS = 1.0;
+    private static final double CMIN_POS = 0.0;
     private double cposition = (0.4);
 
     VoyagerBot robot = new VoyagerBot();
@@ -61,13 +61,18 @@ public class Teleop1P extends LinearOpMode {
             button_dr = gamepad1.dpad_right;
             bumper_left = gamepad1.left_bumper;
             bumper_right = gamepad1.right_bumper;
+            if(gamepad1.right_stick_button) {
+                rotate = 0.5 * rotate;
+                drive = 0.5 * drive;
+                strafe = 0.5 * strafe;
+            }
             if(bumper_left) {
-                robot.lift.setPower(0.9);
+                robot.lift.setPower(1.0);
             } else {
                 robot.lift.setPower(0);
             }
             if(bumper_right) {
-                robot.lift.setPower(-0.6);
+                robot.lift.setPower(-1);
             } else {
                 robot.lift.setPower(0);
             }
@@ -84,8 +89,14 @@ public class Teleop1P extends LinearOpMode {
             }
             if(button_dr) {
                 cposition += CINCREMENT;
+                if(cposition >= CMAX_POS) {
+                    cposition = CMAX_POS;
+                }
             } else if(button_dl) {
                 cposition -= CINCREMENT;
+                if (cposition <= CMIN_POS) {
+                    cposition = CMIN_POS;
+                }
             }
             if(button_dd) {
                 bposition += BINCREMENT;
@@ -98,7 +109,16 @@ public class Teleop1P extends LinearOpMode {
                     bposition = BMIN_POS;
                 }
             }
-
+            if(gamepad2.dpad_up) {
+                robot.extension.setPower(0.3);
+            } else {
+                robot.extension.setPower(0);
+            }
+            if(gamepad2.dpad_down) {
+                robot.extension.setPower(-0.3);
+            } else {
+                robot.extension.setPower(0);
+            }
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
