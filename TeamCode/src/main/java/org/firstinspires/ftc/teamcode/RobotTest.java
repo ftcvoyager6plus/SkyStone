@@ -63,7 +63,7 @@ public class RobotTest extends LinearOpMode {
             button_dd = gamepad1.dpad_down;
             bumper_left = gamepad2.left_bumper;
             bumper_right = gamepad2.right_bumper;
-            if(gamepad1.right_bumper) {
+            if(gamepad1.right_stick_button) {
                 rotate = 0.5 * rotate;
                 drive = 0.5 * drive;
                 strafe = 0.5 * strafe;

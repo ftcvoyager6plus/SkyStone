@@ -23,11 +23,11 @@ public class AutonomousMode6 extends LinearOpMode {
         strafe(0.4,-30.5);
         robot.skystone.setPosition(0);
         sleep(500);
-        strafe(0.5,12);
+        strafe(0.4,12);
         drive(0.6, 52);
         robot.skystone.setPosition(1);
         sleep(500);
-        drive(0.6,-43);
+        drive(0.6,-45);
         strafe(0.5,-13);
         robot.skystone.setPosition(0);
         sleep(500);

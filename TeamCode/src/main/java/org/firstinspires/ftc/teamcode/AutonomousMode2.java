@@ -30,7 +30,7 @@ public class AutonomousMode2 extends LinearOpMode {
         drive(0.1, -12);
         robot.back.setPosition(1);
         sleep(1000);
-        drive(0.3, 29);
+        drive(0.3, 31);
         turn(0.1,-45);
         robot.back.setPosition(0);
         sleep(500);

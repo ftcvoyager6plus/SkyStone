@@ -30,13 +30,13 @@ public class AutonomousMode4 extends LinearOpMode {
         drive(0.1, -12);
         robot.back.setPosition(1);
         sleep(1000);
-        drive(0.3, 33);
+        drive(0.3, 34.5);
         turn(0.1,30);
         robot.back.setPosition(0);
         sleep(500);
         strafe(0.3,48);
         turn(0.3,-25);
-        drive(0.3,-7);
+        drive(0.3,-10);
         //autoDrive(0.2, -12, 0, 0, 20);
     }
     private void drive(double speed, double inches) {
