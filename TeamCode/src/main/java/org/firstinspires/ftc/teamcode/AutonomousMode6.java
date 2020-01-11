@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous(name="Right: Random Skystones", group="Autonomous")
 public class AutonomousMode6 extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
-    private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 134.4;
     static final double DRIVE_GEAR_REDUCTION = 19.2;
     static final double WHEEL_RADIUS_INCHES = 10 / 2.54;

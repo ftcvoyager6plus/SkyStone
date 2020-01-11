@@ -17,6 +17,7 @@ public class VoyagerBot {
     public DcMotor lift = null;
     HardwareMap hwMap = null;
     public CRServo extension = null;
+    public CRServo extension2 = null;
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 537.6;
     static final double DRIVE_GEAR_REDUCTION = 19.2;
@@ -46,6 +47,7 @@ public class VoyagerBot {
         lift = hwMap.get(DcMotor.class, "lift_motor");
         extension = hwMap.get(CRServo.class, "extension");
         //extension = hwMap.get(Servo.class, "extension");
+        extension2 = hwMap.get(CRServo.class, "extension2");
         skystone = hwMap.get(Servo.class, "stone");
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
@@ -66,6 +68,7 @@ public class VoyagerBot {
         back.setPosition(0);
         extension.setPower(0);
         extension.setPower(0);
+        extension2.setPower(0);
         skystone.setPosition(1);
     }
 }

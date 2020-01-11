@@ -112,14 +112,18 @@ public class RobotTest extends LinearOpMode {
                 }
             }
             if(gamepad2.dpad_up) {
-                robot.extension.setPower(0.5);
+                robot.extension.setPower(-0.5);
+                robot.extension2.setPower(0.5);
             } else {
                 robot.extension.setPower(0);
+                robot.extension2.setPower(0);
             }
             if(gamepad2.dpad_down) {
-                robot.extension.setPower(-0.5);
+                robot.extension.setPower(0.5);
+                robot.extension2.setPower(-0.5);
             } else {
                 robot.extension.setPower(0);
+                robot.extension2.setPower(0);
             }
             /* * * * * * * * * * * *
              * Left stick:

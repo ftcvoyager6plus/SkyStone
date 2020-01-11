@@ -29,7 +29,7 @@ public class Teleop1P extends LinearOpMode {
     private static final double MIN_POS = 0.0;
     private double position = (MAX_POS - MIN_POS) / 2;
 
-    private static final double BINCREMENT = 0.03;
+    private static final double BINCREMENT = 0.05;
     private static final double BMAX_POS = 1.0;
     private static final double BMIN_POS = 0.0;
     private double bposition = (BMAX_POS - BMIN_POS) / 2;
@@ -99,12 +99,12 @@ public class Teleop1P extends LinearOpMode {
                 }
             }
             if(button_dd) {
-                bposition += BINCREMENT;
+                bposition -= BINCREMENT;
                 if(bposition >= BMAX_POS) {
                     bposition = BMAX_POS;
                 }
             } else if(button_du) {
-                bposition -= BINCREMENT;
+                bposition += BINCREMENT;
                 if (bposition <= BMIN_POS) {
                     bposition = BMIN_POS;
                 }
