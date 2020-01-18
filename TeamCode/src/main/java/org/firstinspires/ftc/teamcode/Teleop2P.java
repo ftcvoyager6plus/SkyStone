@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name="Teleop 2P", group="Linear Opmode")
-public class RobotTest extends LinearOpMode {
+public class Teleop2P extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     private double leftFrontPower;
     private double leftBackPower;
@@ -28,10 +28,13 @@ public class RobotTest extends LinearOpMode {
     private static final double MIN_POS = 0.0;
     private double position = (MAX_POS - MIN_POS) / 2;
 
-    private static final double BINCREMENT = 0.03;
-    private static final double BMAX_POS = 1.0;
-    private static final double BMIN_POS = 0.0;
-    private double bposition = (BMAX_POS - BMIN_POS) / 2;
+    private static final double BINCREMENT = 0.05;
+    private static final double BBMAX_POS = 0.65;
+    private static final double BBMIN_POS = 0.0;
+    private static final double BMAX_POS = 1;
+    private static final double BMIN_POS = 0.35;
+    private double bposition = BMAX_POS;
+    private double bbposition = BBMIN_POS;
 
     private static final double CINCREMENT = 0.06;
     private static final double CMAX_POS = 1.0;
@@ -47,7 +50,7 @@ public class RobotTest extends LinearOpMode {
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Ready");
         telemetry.update();
 
         waitForStart();
@@ -102,28 +105,42 @@ public class RobotTest extends LinearOpMode {
             }
             if(button_dd) {
                 bposition += BINCREMENT;
+                bbposition -= BINCREMENT;
                 if(bposition >= BMAX_POS) {
                     bposition = BMAX_POS;
                 }
+                if (bbposition <= BBMIN_POS) {
+                    bbposition = BBMIN_POS;
+                }
             } else if(button_du) {
                 bposition -= BINCREMENT;
+                bbposition += BINCREMENT;
                 if (bposition <= BMIN_POS) {
                     bposition = BMIN_POS;
+                }
+                if (bbposition >= BBMAX_POS) {
+                    bbposition = BBMAX_POS;
                 }
             }
             if(gamepad2.dpad_up) {
                 robot.extension.setPower(-0.5);
-                robot.extension2.setPower(0.5);
             } else {
                 robot.extension.setPower(0);
-                robot.extension2.setPower(0);
             }
             if(gamepad2.dpad_down) {
                 robot.extension.setPower(0.5);
-                robot.extension2.setPower(-0.5);
             } else {
                 robot.extension.setPower(0);
-                robot.extension2.setPower(0);
+            }
+            if(gamepad1.y) {
+                robot.yeeter.setPower(0.7);
+            } else {
+                robot.yeeter.setPower(0);
+            }
+            if(gamepad1.x) {
+                robot.yeeter.setPower(-0.7);
+            } else {
+                robot.yeeter.setPower(0);
             }
             /* * * * * * * * * * * *
              * Left stick:
@@ -144,6 +161,7 @@ public class RobotTest extends LinearOpMode {
             robot.rightFront.setPower(rightFrontPower);
             robot.rightBack.setPower(rightBackPower);
             robot.back.setPosition(bposition);
+            robot.back2.setPosition(bbposition);
             robot.claw.setPosition(position);
             robot.skystone.setPosition(cposition);
             sleep(CYCLE_MS);

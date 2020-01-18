@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-
-@Autonomous(name="Driving class Test", group="Test")
-public class Detector extends LinearOpMode {
+@Autonomous(name="GyroDriveTest")
+public class GyroDriveTest extends LinearOpMode {
     Driving driver = new Driving(this);
 
     @Override
@@ -15,7 +14,6 @@ public class Detector extends LinearOpMode {
         telemetry.update();
         driver.resetEncoders();
         waitForStart();
-        driver.drive(0.4, 30);
-
+        driver.gyroDrive(0.6, 96);
     }
 }

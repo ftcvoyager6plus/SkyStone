@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Left: Random Skystones", group="Autonomous")
+@Disabled
 public class AutonomousMode5 extends LinearOpMode {
     VoyagerBot robot = new VoyagerBot();
     private ElapsedTime runtime = new ElapsedTime();
@@ -19,6 +21,8 @@ public class AutonomousMode5 extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
         robot.resetEncoders();
+        telemetry.addData("Status", "Ready");
+        telemetry.update();
         waitForStart();
         strafe(0.4, -30.5);
         robot.skystone.setPosition(0);

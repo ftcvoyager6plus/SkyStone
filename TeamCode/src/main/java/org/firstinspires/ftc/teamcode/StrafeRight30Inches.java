@@ -19,6 +19,8 @@ public class StrafeRight30Inches extends LinearOpMode {
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
         robot.resetEncoders();
+        telemetry.addData("Status", "Ready");
+        telemetry.update();
         waitForStart();
        strafe(0.6, 30);
     }

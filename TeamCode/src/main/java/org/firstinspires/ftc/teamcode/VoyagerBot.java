@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -15,9 +17,11 @@ public class VoyagerBot {
     public Servo back = null;
     public Servo skystone = null;
     public DcMotor lift = null;
+    public DcMotor yeeter = null;
     HardwareMap hwMap = null;
     public CRServo extension = null;
-    public CRServo extension2 = null;
+    public Servo back2 = null;
+    BNO055IMU imu = null;
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 537.6;
     static final double DRIVE_GEAR_REDUCTION = 19.2;
@@ -42,22 +46,25 @@ public class VoyagerBot {
         leftBack = hwMap.get(DcMotor.class, "left_back");
         rightFront = hwMap.get(DcMotor.class, "right_front");
         rightBack = hwMap.get(DcMotor.class, "right_back");
+        yeeter = hwMap.get(DcMotor.class, "yeeter");
         claw = hwMap.get(Servo.class, "claw");
         back = hwMap.get(Servo.class, "back");
         lift = hwMap.get(DcMotor.class, "lift_motor");
         extension = hwMap.get(CRServo.class, "extension");
         //extension = hwMap.get(Servo.class, "extension");
-        extension2 = hwMap.get(CRServo.class, "extension2");
+        back2 = hwMap.get(Servo.class, "back2");
         skystone = hwMap.get(Servo.class, "stone");
         leftFront.setDirection(DcMotor.Direction.FORWARD);
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
 
+
         leftFront.setPower(0);
         leftBack.setPower(0);
         rightFront.setPower(0);
         rightBack.setPower(0);
+        yeeter.setPower(0);
 
         leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -65,10 +72,19 @@ public class VoyagerBot {
         rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         claw.setPosition(0);
-        back.setPosition(0);
+        back.setPosition(0.35);
+        back2.setPosition(0.65);
         extension.setPower(0);
         extension.setPower(0);
-        extension2.setPower(0);
         skystone.setPosition(1);
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.calibrationDataFile = "BNO055IMUCalibration.json";
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        imu = hwMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
 }
