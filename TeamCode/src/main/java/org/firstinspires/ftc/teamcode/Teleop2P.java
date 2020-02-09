@@ -44,7 +44,7 @@ public class Teleop2P extends LinearOpMode {
     private static final double DINCREMENT = 0.03;
     private static final double DMAX_POS = 1.0;
     private static final double DMIN_POS = 0.0;
-    private double dposition = (0.5);
+    private double dposition = (DMAX_POS - DMIN_POS) / 2;
     private boolean halfspeed = false;
     VoyagerBot robot = new VoyagerBot();
     @Override
@@ -142,6 +142,17 @@ public class Teleop2P extends LinearOpMode {
             } else {
                 robot.yeeter.setPower(0);
             }
+            if(gamepad1.a) {
+                dposition += DINCREMENT;
+                if(dposition >= DMAX_POS) {
+                    dposition = DMAX_POS;
+                }
+            } else if(gamepad1.b) {
+                dposition -= DINCREMENT;
+                if (dposition <= DMIN_POS) {
+                    dposition = DMIN_POS;
+                }
+            }
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
@@ -164,6 +175,7 @@ public class Teleop2P extends LinearOpMode {
             robot.back2.setPosition(bbposition);
             robot.claw.setPosition(position);
             robot.skystone.setPosition(cposition);
+            robot.gripper.setPosition(dposition);
             sleep(CYCLE_MS);
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("StoneServo",cposition);

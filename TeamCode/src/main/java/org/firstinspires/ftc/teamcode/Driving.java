@@ -10,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -248,6 +247,10 @@ public class Driving {
                         lastLocation = robotLocationTransform;
                     }
                 }
+                if(runtime.seconds() >= 5.4/2) {
+                    CameraDevice.getInstance().setFlashTorchMode(false);
+                    return 3;
+                }
                 if (targetVisible) {
                     /*VectorF translation = lastLocation.getTranslation();
                     telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
@@ -320,6 +323,10 @@ public class Driving {
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
+                }
+                if(runtime.seconds() >= 3.1) {
+                    CameraDevice.getInstance().setFlashTorchMode(false);
+                    return 3;
                 }
                 if (targetVisible) {
                     /*VectorF translation = lastLocation.getTranslation();

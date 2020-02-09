@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.media.MediaPlayer;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -53,6 +55,11 @@ public class Teleop1P extends LinearOpMode {
     private static final double CMAX_POS = 1.0;
     private static final double CMIN_POS = 0.0;
     private double cposition = (0.4);
+
+    private static final double DINCREMENT = 0.03;
+    private static final double DMAX_POS = 1.0;
+    private static final double DMIN_POS = 0.0;
+    private double dposition = (DMAX_POS - DMIN_POS) / 2;
 
     VoyagerBot robot = new VoyagerBot();
     //Detecting detector = null;
@@ -143,7 +150,7 @@ public class Teleop1P extends LinearOpMode {
             } else {
                 robot.extension.setPower(0);
             }
-            if(gamepad1.y) {
+            /*if(gamepad1.y) {
                 robot.yeeter.setPower(0.7);
             } else {
                 robot.yeeter.setPower(0);
@@ -152,6 +159,17 @@ public class Teleop1P extends LinearOpMode {
                 robot.yeeter.setPower(-0.7);
             } else {
                 robot.yeeter.setPower(0);
+            }*/ // TODO: yeeter is gone!!!!!!!!!!
+            if(gamepad1.x) {
+                dposition += DINCREMENT;
+                if(dposition >= DMAX_POS) {
+                    dposition = DMAX_POS;
+                }
+            } else if(gamepad1.y) {
+                dposition -= DINCREMENT;
+                if (dposition <= DMIN_POS) {
+                    dposition = DMIN_POS;
+                }
             }
 
             /*if (((VuforiaTrackableDefaultListener)detector.stoneTarget.getListener()).isVisible()) {
@@ -196,6 +214,7 @@ public class Teleop1P extends LinearOpMode {
             robot.back2.setPosition(bbposition);
             robot.claw.setPosition(position);
             robot.skystone.setPosition(cposition);
+            robot.gripper.setPosition(dposition);
             sleep(CYCLE_MS);
         }
     }

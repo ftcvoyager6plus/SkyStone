@@ -17,10 +17,10 @@ public class RightBuildplateWall extends LinearOpMode {
         waitForStart();
         driver.drive(0.3, -20);
         driver.strafe(0.3, -9);
-        driver.drive(0.2, -9.5);
+        driver.drive(0.2, -10.5);
         driver.backServosDown();
         driver.gyroturn(-0.35,-180);
-        driver.drive(0.3,-20);
+        driver.drive(0.3,-21);
         driver.backServosUp();
         // remove past here
         driver.strafe(0.3, -33);

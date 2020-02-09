@@ -21,6 +21,7 @@ public class VoyagerBot {
     HardwareMap hwMap = null;
     public CRServo extension = null;
     public Servo back2 = null;
+    public Servo gripper = null;
     BNO055IMU imu = null;
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 537.6;
@@ -40,6 +41,16 @@ public class VoyagerBot {
         this.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         this.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
+    public void newReset() {
+        this.leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.leftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.leftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.rightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.rightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
     public void init(HardwareMap ahwMap) {
         hwMap = ahwMap;
         leftFront = hwMap.get(DcMotor.class, "left_front");
@@ -49,6 +60,7 @@ public class VoyagerBot {
         yeeter = hwMap.get(DcMotor.class, "yeeter");
         claw = hwMap.get(Servo.class, "claw");
         back = hwMap.get(Servo.class, "back");
+        gripper = hwMap.get(Servo.class, "gripper");
         lift = hwMap.get(DcMotor.class, "lift_motor");
         extension = hwMap.get(CRServo.class, "extension");
         //extension = hwMap.get(Servo.class, "extension");
@@ -76,6 +88,7 @@ public class VoyagerBot {
         back2.setPosition(0.65);
         extension.setPower(0);
         extension.setPower(0);
+        gripper.setPosition(0);
         skystone.setPosition(1);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;

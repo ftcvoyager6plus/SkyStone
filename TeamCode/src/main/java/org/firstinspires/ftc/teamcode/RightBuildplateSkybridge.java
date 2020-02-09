@@ -18,13 +18,13 @@ public class RightBuildplateSkybridge extends LinearOpMode {
         waitForStart();
         driver.drive(0.3, -20);
         driver.strafe(0.3, -9);
-        driver.drive(0.2, -9.5);
+        driver.drive(0.2, -10.5);
         driver.backServosDown();
         driver.gyroturn(-0.35,-180);
-        driver.drive(0.3,-15);
+        driver.drive(0.3,-16);
         driver.backServosUp();
         //driver.turn(0.3,-10);
         driver.strafe(0.3,-48);
-        driver.drive(0.3,13);
+        driver.drive(0.3,15);
     }
 }

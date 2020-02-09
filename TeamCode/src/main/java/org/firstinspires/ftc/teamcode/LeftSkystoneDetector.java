@@ -31,7 +31,7 @@ public class LeftSkystoneDetector extends LinearOpMode {
         position = driver.detectorDrive(0.2, 60);
         telemetry.addData("Position", position);
         telemetry.update();
-        driver.drive(0.2, 6);
+        driver.drive(0.2, 7);
         driver.strafe(0.2, -6.75);
         driver.skystoneDown();
         driver.strafe(0.2, 8);
@@ -49,20 +49,22 @@ public class LeftSkystoneDetector extends LinearOpMode {
         if(position != 3) {
             driver.drive(0.5, distance);
             //move this out
-            driver.strafe(0.2, -10);
+            driver.strafe(0.2, -11);
             driver.skystoneDown();
-            driver.strafe(0.2, 10);
-            driver.drive(0.5, -distance+2);
+            driver.strafe(0.2, 11);
+            driver.drive(0.5, -(distance+4));
             driver.skystoneUp();
-            driver.northeast(1, 24);
+            //driver.northeast(1, 24);
+            driver.drive(1, 15);
         } else {
             driver.drive(0.4, 39);
-            driver.strafe(0.2, -10);
+            driver.strafe(0.2, -11);
             driver.skystoneDown();
-            driver.strafe(0.2, 15);
+            driver.strafe(0.2, 10);
             driver.drive(0.6, -41);
             driver.skystoneUp();
-            driver.northeast(1, 24);
+            //driver.northeast(1, 24);
+            driver.drive(1, 15);
         }
         // First position: 44
         // Second position: 52
