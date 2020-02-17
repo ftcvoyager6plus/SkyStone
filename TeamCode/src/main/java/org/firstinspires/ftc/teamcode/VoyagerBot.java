@@ -2,8 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -22,6 +25,8 @@ public class VoyagerBot {
     public CRServo extension = null;
     public Servo back2 = null;
     public Servo gripper = null;
+    public RevBlinkinLedDriver underglow = null;
+    public Rev2mDistanceSensor distance = null;
     BNO055IMU imu = null;
     private ElapsedTime runtime = new ElapsedTime();
     static final double COUNTS_PER_MOTOR_REV = 537.6;
@@ -70,6 +75,9 @@ public class VoyagerBot {
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
+        distance = hwMap.get(Rev2mDistanceSensor.class, "distance");
+        underglow = hwMap.get(RevBlinkinLedDriver.class, "underglow");
+        underglow.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED);
 
 
         leftFront.setPower(0);
@@ -88,8 +96,8 @@ public class VoyagerBot {
         back2.setPosition(0.65);
         extension.setPower(0);
         extension.setPower(0);
-        gripper.setPosition(0);
-        skystone.setPosition(1);
+        gripper.setPosition(0.1);
+        skystone.setPosition(0.5);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;

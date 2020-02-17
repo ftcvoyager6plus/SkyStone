@@ -1,9 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.media.MediaPlayer;
+
+import com.qualcomm.ftccommon.SoundPlayer;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @TeleOp(name="Teleop 2P", group="Linear Opmode")
 public class Teleop2P extends LinearOpMode {
@@ -46,6 +53,8 @@ public class Teleop2P extends LinearOpMode {
     private static final double DMIN_POS = 0.0;
     private double dposition = (DMAX_POS - DMIN_POS) / 2;
     private boolean halfspeed = false;
+    private RevBlinkinLedDriver.BlinkinPattern activePattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+    private RevBlinkinLedDriver.BlinkinPattern passivePattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE;
     VoyagerBot robot = new VoyagerBot();
     @Override
     public void runOpMode() {
@@ -66,17 +75,22 @@ public class Teleop2P extends LinearOpMode {
             button_dd = gamepad1.dpad_down;
             bumper_left = gamepad2.left_bumper;
             bumper_right = gamepad2.right_bumper;
+            if((drive == 0) && (strafe == 0) && (rotate == 0)) {
+                robot.underglow.setPattern(passivePattern);
+            } else {
+                robot.underglow.setPattern(activePattern);
+            }
             if(gamepad1.right_stick_button) {
                 rotate = 0.5 * rotate;
                 drive = 0.5 * drive;
                 strafe = 0.5 * strafe;
             }
-            if(bumper_left) {
+            if(bumper_left && (robot.lift.getCurrentPosition() <= 0)) { //down
                 robot.lift.setPower(1);
             } else {
                 robot.lift.setPower(0);
             }
-            if(bumper_right) {
+            if(bumper_right && (robot.lift.getCurrentPosition() >= -7200)) { //up
                 robot.lift.setPower(-1);
             } else {
                 robot.lift.setPower(0);
@@ -138,21 +152,24 @@ public class Teleop2P extends LinearOpMode {
                 robot.yeeter.setPower(0);
             }
             if(gamepad1.x) {
+                SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, R.raw.yeet);
+                passivePattern = RevBlinkinLedDriver.BlinkinPattern.BREATH_RED;
                 robot.yeeter.setPower(-0.7);
             } else {
                 robot.yeeter.setPower(0);
             }
-            if(gamepad1.a) {
+            if(gamepad1.b) {
                 dposition += DINCREMENT;
                 if(dposition >= DMAX_POS) {
                     dposition = DMAX_POS;
                 }
-            } else if(gamepad1.b) {
+            } else if(gamepad1.a) {
                 dposition -= DINCREMENT;
                 if (dposition <= DMIN_POS) {
                     dposition = DMIN_POS;
                 }
             }
+
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
@@ -176,11 +193,9 @@ public class Teleop2P extends LinearOpMode {
             robot.claw.setPosition(position);
             robot.skystone.setPosition(cposition);
             robot.gripper.setPosition(dposition);
-            sleep(CYCLE_MS);
-            telemetry.addData("Status", "Run Time: " + runtime.toString());
-            //telemetry.addData("StoneServo",cposition);
-            telemetry.addData("Motors", "left front (%.2f), left back (%.2f), right front (%.2f), right back (%.2f)", leftFrontPower, leftBackPower, rightFrontPower, rightBackPower);
+            telemetry.addData("range", String.format("%.01f in", robot.distance.getDistance(DistanceUnit.INCH)));
             telemetry.update();
+            sleep(CYCLE_MS);
         }
     }
 }

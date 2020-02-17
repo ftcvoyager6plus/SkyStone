@@ -2,12 +2,14 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
@@ -21,7 +23,7 @@ public class NewDriving {
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) / (WHEEL_RADIUS_INCHES * Math.PI);
     private boolean targetVisible = false;
     private OpenGLMatrix lastLocation = null;
-    Detecting detector = new Detecting();
+    //Detecting detector = new Detecting();
     Orientation lastAngles = new Orientation();
     private ElapsedTime runtime = new ElapsedTime();
     double globalAngle, correction;
@@ -40,7 +42,7 @@ public class NewDriving {
         robot.init(opmode.hardwareMap);
         opmode.telemetry.addData("[!]", "Wait for camera initialization...");
         opmode.telemetry.update();
-        detector.init(opmode.hardwareMap);
+        //detector.init(opmode.hardwareMap);
     }
     public void drive(double speed, double inches) {
         inches = inches * 24 / 59;
@@ -89,6 +91,23 @@ public class NewDriving {
                 while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() >= leftFrontTarget | robot.leftBack.getCurrentPosition() <= leftBackTarget | robot.rightFront.getCurrentPosition() <= rightFrontTarget | robot.rightBack.getCurrentPosition() >= rightBackTarget)) {
 
                 }
+            }
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+    }
+    public void strafeTillLimit(double speed, double _inches) {
+        double inches = Math.abs(_inches);
+        if(opmode.opModeIsActive()) {
+            robot.leftFront.setPower(speed);
+            robot.rightFront.setPower(-speed);
+            robot.leftBack.setPower(-speed);
+            robot.rightBack.setPower(speed);
+            while(opmode.opModeIsActive() && (robot.distance.getDistance(DistanceUnit.INCH) > inches)) {
+                opmode.telemetry.addData("Distance", robot.distance.getDistance(DistanceUnit.INCH));
+                opmode.telemetry.update();
             }
             robot.leftFront.setPower(0);
             robot.rightFront.setPower(0);
@@ -167,27 +186,71 @@ public class NewDriving {
                 backServosDown();
             } else if(path.move == M.BACK_UP) {
                 backServosUp();
+            } else if(path.move == M.SKYSTONE_DOWN) {
+                skystoneDown();
+            } else if(path.move == M.SKYSTONE_UP) {
+                skystoneUp();
+            } else if(path.move == M.SKYSTONE_POS) {
+                skystonePos(path.arg);
+            } else if(path.move == M.BACK_UP_SKYSTONE_HALF) {
+                backServosUpAndSkystoneHalf();
+            } else if(path.move == M.STRAFE_TILL) {
+                strafeTillLimit(path.speed, path.arg);
+            } else if(path.move == M.SKYSTONE_DOWN_GRIPPER_OUT) {
+                skystoneDownGripperOut();
+            } else if(path.move == M.GRIPPER_IN) {
+                gripperIn();
+            } else if(path.move == M.BACK_HALF) {
+                backHalf();
             }
+            opmode.sleep(200);
         }
+    }
+    void backHalf() {
+        robot.back.setPosition(0.675);
+        robot.back2.setPosition(0.325);
+    }
+    void backServosUpAndSkystoneHalf() {
+        robot.back.setPosition(0.35);
+        robot.back2.setPosition(0.65);
+        robot.skystone.setPosition(0.25);
+        opmode.sleep(500);
     }
     void backServosDown() {
         robot.back.setPosition(1.0);
         robot.back2.setPosition(0.0);
-        opmode.sleep(600);
+        opmode.sleep(500);
+    }
+    void gripperIn() {
+        robot.gripper.setPosition(0);
+        opmode.sleep(450);
     }
     void backServosUp() {
         robot.back.setPosition(0.35);
         robot.back2.setPosition(0.65);
-        opmode.sleep(600);
+        opmode.sleep(500);
     }
     void skystoneDown() {
         armDown = true;
         robot.skystone.setPosition(0);
         opmode.sleep(500);
     }
+    void skystoneDownGripperOut() {
+        armDown = true;
+        robot.skystone.setPosition(0);
+        opmode.sleep(300);
+        robot.gripper.setPosition(1);
+        opmode.sleep(300);
+    }
     void skystoneUp() {
         armDown = false;
         robot.skystone.setPosition(1);
         opmode.sleep(500);
+    }
+    void skystonePos(double pos) {
+        robot.skystone.setPosition(Math.abs(pos));
+        opmode.sleep(500);
+    }
+    void skystoneHalf() {
     }
 }

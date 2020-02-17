@@ -59,7 +59,7 @@ public class SampleRevBlinkinLedDriver extends OpMode {
     private final static int LED_PERIOD = 10;
 
     /*
-     * Rate limit gamepad button presses to every 500ms.
+     * Rate limit gamepad button presses to evetgbry 500ms.
      */
     private final static int GAMEPAD_LOCKOUT = 500;
 

@@ -8,10 +8,18 @@ public class Path {
         this.move = _move;
         if(direction == D.FORWARD) {
             this.speed = Math.abs(_speed);
-            this.arg = Math.abs(_arg);
+            if(_move != M.ROTATE) {
+                this.arg = Math.abs(_arg);
+            } else {
+                this.arg = _arg;
+            }
         } else {
             this.speed = -Math.abs(_speed);
-            this.arg = -Math.abs(_arg);
+            if(_move != M.ROTATE) {
+                this.arg = -Math.abs(_arg);
+            } else {
+                this.arg = _arg;
+            }
         }
     }
 }
