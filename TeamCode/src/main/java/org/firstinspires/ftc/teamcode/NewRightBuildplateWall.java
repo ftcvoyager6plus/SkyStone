@@ -26,9 +26,10 @@ public class NewRightBuildplateWall extends LinearOpMode {
                 new Path(M.STRAFE, D.BACKWARD, 0.5, 28),
                 new Path(M.DRIVE, D.BACKWARD, 0.5, 22),
                 new Path(M.SKYSTONE_POS, D.N, 0, 0.25),
-                new Path(M.STRAFE, D.BACKWARD, 0.5, 18),
+                new Path(M.STRAFE, D.BACKWARD, 0.5, 12),
                 new Path(M.SKYSTONE_UP, D.N, 0, 0)
         };
+        driver.skystonePos(0.2);
         driver.parseMoves(paths);
     }
 }

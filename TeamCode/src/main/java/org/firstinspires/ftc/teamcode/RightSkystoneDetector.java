@@ -1,70 +1,88 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-
 
 @Autonomous(name="Right: Skystone Detector")
 public class RightSkystoneDetector extends LinearOpMode {
-    Driving driver = new Driving(this);
-    private boolean targetVisible = false;
-    private OpenGLMatrix lastLocation = null;
-    Orientation rotation = null;
-    VectorF translation = null;
-    int position = 1;
-    double distance = -40;
+    NewDriving driver = new NewDriving(this);
+    int position;
+
     @Override
     public void runOpMode() {
         driver.initHwMap();
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
         driver.resetEncoders();
+        Path[] pos_1_paths = {
+                new Path(M.DRIVE, D.FORWARD, 0.25, 1),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.2),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 5),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 40),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 65),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 6),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 6),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 60),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 10),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 12),
+        };
+        Path[] pos_2_paths = {
+                new Path(M.DRIVE, D.BACKWARD, 0.25, 3),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.2),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 5),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 48),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 73),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 7),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 7),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 73),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 15),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 12),
+        };
+        Path[] pos_3_paths = {
+                new Path(M.DRIVE, D.BACKWARD, 0.25, 12),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.175),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 5),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 55),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 39),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 7),
+                new Path(M.SKYSTONE_DOWN_GRIPPER_OUT, D.N, 0, 0),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.FORWARD, 0.4, 7),
+                new Path(M.DRIVE, D.FORWARD, 0.4, 36),
+                new Path(M.GRIPPER_IN, D.N, 0, 0),
+                new Path(M.DRIVE, D.BACKWARD, 0.4, 10),
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.15),
+                new Path(M.STRAFE, D.BACKWARD, 0.4, 12)
+        };
+        driver.startAngles();
         telemetry.addData("Status", "Ready");
         telemetry.update();
         waitForStart();
-        driver.strafe(0.3, -23);
-        position = driver.detectorDriveRight(0.2, -60);
-        telemetry.addData("Position", position);
-        telemetry.update();
-        driver.drive(0.2, 8);
-        driver.strafe(0.2, -6.75);
-        driver.skystoneDown();
-        driver.strafe(0.2, 8);
+        driver.skystonePos(0.2);
+        driver.gyrostrafe(-0.4, -26);
+        sleep(100);
+        position = driver.getSkystonePosition("right");
         if(position == 1) {
-            distance = -40;
-        } if(position == 2) {
-            distance = -48;
-        } if(position == 3) {
-            distance = -56; // add 24 on the way back
+            driver.parseMoves(pos_1_paths);
+        } else if(position == 2) {
+            driver.parseMoves(pos_2_paths);
+        } else if(position == 3) {
+            driver.parseMoves(pos_3_paths);
         }
-        driver.drive(0.4, -distance);
-        driver.skystoneUp();
-        sleep(50);
-        distance = -distance + 24; //back same plus 24
-        if(position != 3) {
-            driver.drive(0.5, -distance);
-            //move this out
-            driver.strafe(0.2, -10);
-            driver.skystoneDown();
-            driver.strafe(0.2, 9);
-            driver.drive(0.5, distance+2);
-            driver.skystoneUp();
-            driver.southwest(1, -24);
-        } else {
-            driver.drive(0.4, -39);
-            driver.strafe(0.2, -8);
-            driver.skystoneDown();
-            driver.strafe(0.2, 8);
-            driver.drive(0.7, 41);
-            driver.skystoneUp();
-            driver.southwest(1, -24);
-        }
-        // First position: 44
-        // Second position: 52
-        // Third position: 60
     }
 }

@@ -55,13 +55,18 @@ public class Teleop2P extends LinearOpMode {
     private boolean halfspeed = false;
     private RevBlinkinLedDriver.BlinkinPattern activePattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
     private RevBlinkinLedDriver.BlinkinPattern passivePattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE;
+    //private boolean frontIsSkystone = false;
+    //private boolean backIsSkystone = false;
+    int front_red, front_green, front_blue, back_red, back_green, back_blue;
     VoyagerBot robot = new VoyagerBot();
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
+        robot.resetEncoders();
+        robot.color_front.enableLed(false);
+        robot.color_back.enableLed(false);
         telemetry.addData("Status", "Ready");
         telemetry.update();
-
         waitForStart();
         runtime.reset();
 
@@ -85,14 +90,17 @@ public class Teleop2P extends LinearOpMode {
                 drive = 0.5 * drive;
                 strafe = 0.5 * strafe;
             }
-            if(bumper_left && (robot.lift.getCurrentPosition() <= 0)) { //down
+            if(bumper_left && (robot.lift.getCurrentPosition() < -500)) { //down
                 robot.lift.setPower(1);
-            } else {
+            } else if(robot.lift.getCurrentPosition() >= -500) {
                 robot.lift.setPower(0);
             }
-            if(bumper_right && (robot.lift.getCurrentPosition() >= -7200)) { //up
+            if(bumper_right && (robot.lift.getCurrentPosition() > -13300)) { //up
                 robot.lift.setPower(-1);
-            } else {
+            } else if(robot.lift.getCurrentPosition() <= -13300) {
+                robot.lift.setPower(0);
+            }
+            if(!bumper_left && !bumper_right) {
                 robot.lift.setPower(0);
             }
             if(button_a) {
@@ -138,24 +146,22 @@ public class Teleop2P extends LinearOpMode {
             }
             if(gamepad2.dpad_up) {
                 robot.extension.setPower(-0.5);
-            } else {
-                robot.extension.setPower(0);
             }
             if(gamepad2.dpad_down) {
                 robot.extension.setPower(0.5);
-            } else {
+            }
+            if(!gamepad2.dpad_up && !gamepad2.dpad_down) {
                 robot.extension.setPower(0);
             }
             if(gamepad1.y) {
-                robot.yeeter.setPower(0.7);
-            } else {
-                robot.yeeter.setPower(0);
+                robot.yeeter.setPower(0.5);
             }
             if(gamepad1.x) {
                 SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, R.raw.yeet);
                 passivePattern = RevBlinkinLedDriver.BlinkinPattern.BREATH_RED;
                 robot.yeeter.setPower(-0.7);
-            } else {
+            }
+            if(!gamepad1.y && !gamepad1.x) {
                 robot.yeeter.setPower(0);
             }
             if(gamepad1.b) {
@@ -169,7 +175,17 @@ public class Teleop2P extends LinearOpMode {
                     dposition = DMIN_POS;
                 }
             }
-
+            /*front_red = robot.color_front.red();
+            front_green = robot.color_front.green();
+            front_blue = robot.color_front.blue();
+            back_red = robot.color_back.red();
+            back_green = robot.color_back.green();
+            back_blue = robot.color_back.blue();
+            frontIsSkystone = (front_red + front_green) / front_blue < 2.5;
+            backIsSkystone = (back_red + back_green) / back_blue < 2.5;*/
+            /*telemetry.addData("Front Skystone", frontIsSkystone ? "yes" : "no");
+            telemetry.addData("Back Skystone", backIsSkystone ? "yes": "no");
+            telemetry.update();*/
             /* * * * * * * * * * * *
              * Left stick:
              * - up and down moves forwards and backwards
@@ -193,8 +209,6 @@ public class Teleop2P extends LinearOpMode {
             robot.claw.setPosition(position);
             robot.skystone.setPosition(cposition);
             robot.gripper.setPosition(dposition);
-            telemetry.addData("range", String.format("%.01f in", robot.distance.getDistance(DistanceUnit.INCH)));
-            telemetry.update();
             sleep(CYCLE_MS);
         }
     }

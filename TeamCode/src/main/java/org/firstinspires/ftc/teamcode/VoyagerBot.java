@@ -4,7 +4,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -25,6 +27,8 @@ public class VoyagerBot {
     public CRServo extension = null;
     public Servo back2 = null;
     public Servo gripper = null;
+    public ColorSensor color_front = null;
+    public ColorSensor color_back = null;
     public RevBlinkinLedDriver underglow = null;
     public Rev2mDistanceSensor distance = null;
     BNO055IMU imu = null;
@@ -75,6 +79,10 @@ public class VoyagerBot {
         leftBack.setDirection(DcMotor.Direction.FORWARD);
         rightFront.setDirection(DcMotor.Direction.REVERSE);
         rightBack.setDirection(DcMotor.Direction.REVERSE);
+        color_front = hwMap.get(ColorSensor.class, "color_front");
+        color_back = hwMap.get(ColorSensor.class, "color_back");
+        color_front.enableLed(false);
+        color_back.enableLed(false);
         distance = hwMap.get(Rev2mDistanceSensor.class, "distance");
         underglow = hwMap.get(RevBlinkinLedDriver.class, "underglow");
         underglow.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED);
@@ -97,7 +105,7 @@ public class VoyagerBot {
         extension.setPower(0);
         extension.setPower(0);
         gripper.setPosition(0.1);
-        skystone.setPosition(0.5);
+        skystone.setPosition(0.4);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;

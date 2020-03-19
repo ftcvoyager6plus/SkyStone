@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -28,13 +29,48 @@ public class NewDriving {
     private ElapsedTime runtime = new ElapsedTime();
     double globalAngle, correction;
     boolean armDown = false;
+    float global_angle = 0;
     public NewDriving(LinearOpMode opmode) {
         this.opmode = opmode;
     }
     public void stuff() {
 
     }
-
+    public int getSkystonePosition(String position) {
+        robot.color_front.enableLed(true);
+        robot.color_back.enableLed(true);
+        int front_red, front_green, front_blue, back_red, back_green, back_blue;
+        boolean frontIsSkystone, backIsSkystone;
+        front_red = robot.color_front.red();
+        front_green = robot.color_front.green();
+        front_blue = robot.color_front.blue();
+        back_red = robot.color_back.red();
+        back_green = robot.color_back.green();
+        back_blue = robot.color_back.blue();
+        frontIsSkystone = (front_red + front_green) / front_blue < 3.5;
+        backIsSkystone = (back_red + back_green) / back_blue < 3.5;
+        opmode.telemetry.addData("front", (front_red + front_green) / front_blue);
+        opmode.telemetry.addData("back", (back_red + back_green) / back_blue);
+        opmode.telemetry.update();
+        robot.color_front.enableLed(false);
+        robot.color_back.enableLed(false);
+        int two = 2;
+        int one = 1;
+        if(position == "right") {
+            two = 1;
+            one = 2;
+        }
+        int three = 3;
+        if(frontIsSkystone && !backIsSkystone) {
+            return two;
+        } else if(backIsSkystone && !frontIsSkystone) {
+            return one;
+        } else if(!backIsSkystone && !frontIsSkystone) {
+            return three;
+        } else {
+            return one;
+        }
+    }
     public void resetEncoders() {
         robot.resetEncoders();
     }
@@ -42,6 +78,8 @@ public class NewDriving {
         robot.init(opmode.hardwareMap);
         opmode.telemetry.addData("[!]", "Wait for camera initialization...");
         opmode.telemetry.update();
+        robot.color_front.enableLed(true);
+        robot.color_back.enableLed(true);
         //detector.init(opmode.hardwareMap);
     }
     public void drive(double speed, double inches) {
@@ -63,6 +101,117 @@ public class NewDriving {
             } else {
                 while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() >= leftFrontTarget | robot.leftBack.getCurrentPosition() >= leftBackTarget | robot.rightFront.getCurrentPosition() >= rightFrontTarget | robot.rightBack.getCurrentPosition() >= rightBackTarget)) {
 
+                }
+            }
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+    }
+    public float getError(float target) {
+        Orientation angles;
+        float heading, robotError;
+        angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        heading = angles.firstAngle;
+        robotError = target - heading;
+        while (robotError > 180)  robotError -= 360;
+        while (robotError <= -180) robotError += 360;
+        return robotError;
+    }
+    public double getSteer(float error, double coef) {
+        return Range.clip(coef * error, -1, 1);
+    }
+    public void gyrodrive(double speed, double inches) {
+        inches = inches * 24 / 59;
+        int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
+        double steer;
+        double leftFrontPower;
+        double leftBackPower;
+        double rightFrontPower;
+        double rightBackPower;
+        if(opmode.opModeIsActive()) {
+            leftFrontTarget = robot.leftFront.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+            leftBackTarget = robot.leftBack.getCurrentPosition() +  (int)(inches * COUNTS_PER_INCH);
+            rightFrontTarget = robot.rightFront.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+            rightBackTarget = robot.rightBack.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+
+            robot.leftFront.setPower(speed);
+            robot.rightFront.setPower(speed);
+            robot.leftBack.setPower(speed);
+            robot.rightBack.setPower(speed);
+            if(inches >= 0) {
+                while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() <= leftFrontTarget | robot.leftBack.getCurrentPosition() <= leftBackTarget | robot.rightFront.getCurrentPosition() <= rightFrontTarget | robot.rightBack.getCurrentPosition() <= rightBackTarget)) {
+                    steer = getSteer(getError(global_angle), 0.02);
+                    leftFrontPower = speed - steer;
+                    leftBackPower = speed - steer;
+                    rightFrontPower = speed + steer;
+                    rightBackPower = speed + steer;
+                    robot.leftFront.setPower(leftFrontPower);
+                    robot.rightFront.setPower(rightFrontPower);
+                    robot.leftBack.setPower(leftBackPower);
+                    robot.rightBack.setPower(rightBackPower);
+                }
+            } else {
+                while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() >= leftFrontTarget | robot.leftBack.getCurrentPosition() >= leftBackTarget | robot.rightFront.getCurrentPosition() >= rightFrontTarget | robot.rightBack.getCurrentPosition() >= rightBackTarget)) {
+                    steer = getSteer(getError(global_angle), 0.02);
+                    leftFrontPower = speed - steer;
+                    leftBackPower = speed - steer;
+                    rightFrontPower = speed + steer;
+                    rightBackPower = speed + steer;
+                    robot.leftFront.setPower(leftFrontPower);
+                    robot.rightFront.setPower(rightFrontPower);
+                    robot.leftBack.setPower(leftBackPower);
+                    robot.rightBack.setPower(rightBackPower);
+                }
+            }
+            robot.leftFront.setPower(0);
+            robot.rightFront.setPower(0);
+            robot.leftBack.setPower(0);
+            robot.rightBack.setPower(0);
+        }
+    }
+    public void gyrostrafe(double speed, double inches) {
+        inches = inches * 24 / 55;
+        int leftFrontTarget, leftBackTarget, rightFrontTarget, rightBackTarget;
+        double steer;
+        double leftFrontPower;
+        double leftBackPower;
+        double rightFrontPower;
+        double rightBackPower;
+        if(opmode.opModeIsActive()) {
+            leftFrontTarget = robot.leftFront.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+            leftBackTarget = robot.leftBack.getCurrentPosition() -  (int)(inches * COUNTS_PER_INCH);
+            rightFrontTarget = robot.rightFront.getCurrentPosition() - (int)(inches * COUNTS_PER_INCH);
+            rightBackTarget = robot.rightBack.getCurrentPosition() + (int)(inches * COUNTS_PER_INCH);
+            robot.leftFront.setPower(speed);
+            robot.rightFront.setPower(-speed);
+            robot.leftBack.setPower(-speed);
+            robot.rightBack.setPower(speed);
+
+            if(inches >= 0) {
+                while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() <= leftFrontTarget | robot.leftBack.getCurrentPosition() >= leftBackTarget | robot.rightFront.getCurrentPosition() >= rightFrontTarget | robot.rightBack.getCurrentPosition() <= rightBackTarget)) {
+                    steer = getSteer(getError(global_angle), 0.05);
+                    leftFrontPower = speed - steer;
+                    leftBackPower = -speed - steer;
+                    rightFrontPower = -speed + steer;
+                    rightBackPower = speed + steer;
+                    robot.leftFront.setPower(leftFrontPower);
+                    robot.rightFront.setPower(rightFrontPower);
+                    robot.leftBack.setPower(leftBackPower);
+                    robot.rightBack.setPower(rightBackPower);
+                }
+            } else {
+                while(opmode.opModeIsActive() && (robot.leftFront.getCurrentPosition() >= leftFrontTarget | robot.leftBack.getCurrentPosition() <= leftBackTarget | robot.rightFront.getCurrentPosition() <= rightFrontTarget | robot.rightBack.getCurrentPosition() >= rightBackTarget)) {
+                    steer = -getSteer(getError(global_angle), 0.05);
+                    leftFrontPower = speed + steer;
+                    leftBackPower = -speed - steer;
+                    rightFrontPower = -speed + steer;
+                    rightBackPower = speed - steer;
+                    robot.leftFront.setPower(leftFrontPower);
+                    robot.rightFront.setPower(rightFrontPower);
+                    robot.leftBack.setPower(leftBackPower);
+                    robot.rightBack.setPower(rightBackPower);
                 }
             }
             robot.leftFront.setPower(0);
@@ -115,10 +264,30 @@ public class NewDriving {
             robot.rightBack.setPower(0);
         }
     }
+    public void startAngles() {
+        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 100);
+    }
+    public float getAngle() {
+        Orientation angles;
+        float heading;
+        angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        heading = angles.firstAngle;
+        return heading;
+    }
+    public void correct() {
+        float offset = getAngle();
+        if(1 == 1) {
+            if(offset > 2) {
+                gyroturn(0.1, 2);
+            } else if(offset < -2) {
+                gyroturn(-0.1, -2);
+            }
+        }
+    }
     public void gyroturn(double speed, double degrees) {
         Orientation angles;
         float heading;
-        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 100);
         if(opmode.opModeIsActive()) {
             robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -133,6 +302,44 @@ public class NewDriving {
                 angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
                 //heading = AngleUnit.DEGREES.normalize(angles.firstAngle);
                 heading = angles.firstAngle;
+                /*if(Math.abs(heading) < Math.abs(degrees)) {*/
+                if((heading < (degrees + 2)) && (heading > (degrees - 2))) {
+                    robot.leftFront.setPower(0);
+                    robot.rightFront.setPower(0);
+                    robot.leftBack.setPower(0);
+                    robot.rightBack.setPower(0);
+                    global_angle += degrees;
+                    robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    return;
+                }
+            }
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+    }
+    public void driveturn(double speed, double degrees) {
+        Orientation angles;
+        float heading;
+        robot.imu.startAccelerationIntegration(new Position(), new Velocity(), 1000);
+        if(opmode.opModeIsActive()) {
+            robot.rightBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.rightFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            robot.leftFront.setPower(-0.1);
+            robot.rightFront.setPower(speed);
+            robot.leftBack.setPower(-0.1);
+            robot.rightBack.setPower(speed);
+            while(opmode.opModeIsActive()) {
+                angles   = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+                //heading = AngleUnit.DEGREES.normalize(angles.firstAngle);
+                heading = angles.firstAngle;
                 if((heading < (degrees + 1)) && (heading > (degrees - 1))) {
                     robot.leftFront.setPower(0);
                     robot.rightFront.setPower(0);
@@ -141,10 +348,10 @@ public class NewDriving {
                     return;
                 }
             }
-            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void turn(double speed, double degrees) {
@@ -177,9 +384,9 @@ public class NewDriving {
     public void parseMoves(Path[] paths) {
         for(Path path: paths) {
             if(path.move == M.DRIVE) {
-                drive(path.speed, path.arg);
+                gyrodrive(path.speed, path.arg);
             } else if(path.move == M.STRAFE) {
-                strafe(path.speed, path.arg);
+                gyrostrafe(path.speed, path.arg);
             } else if(path.move == M.ROTATE) {
                 gyroturn(path.speed, path.arg);
             } else if(path.move == M.BACK_DOWN) {
@@ -202,13 +409,17 @@ public class NewDriving {
                 gripperIn();
             } else if(path.move == M.BACK_HALF) {
                 backHalf();
+            } else if(path.move == M.DRIVETURN) {
+                driveturn(path.speed, path.arg);
+            } else if(path.move == M.CORRECT) {
+                correct();
             }
             opmode.sleep(200);
         }
     }
     void backHalf() {
-        robot.back.setPosition(0.675);
-        robot.back2.setPosition(0.325);
+        robot.back.setPosition(0.775);
+        robot.back2.setPosition(0.225);
     }
     void backServosUpAndSkystoneHalf() {
         robot.back.setPosition(0.35);
@@ -240,7 +451,7 @@ public class NewDriving {
         robot.skystone.setPosition(0);
         opmode.sleep(300);
         robot.gripper.setPosition(1);
-        opmode.sleep(300);
+        opmode.sleep(350);
     }
     void skystoneUp() {
         armDown = false;

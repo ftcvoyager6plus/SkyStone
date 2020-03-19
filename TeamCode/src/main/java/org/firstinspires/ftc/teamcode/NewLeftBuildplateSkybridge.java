@@ -16,17 +16,19 @@ public class NewLeftBuildplateSkybridge extends LinearOpMode {
         telemetry.update();
         waitForStart();
         Path[] paths = {
+                new Path(M.SKYSTONE_POS, D.N, 0, 0.4),
                 new Path(M.DRIVE, D.BACKWARD, 0.5, 20),
                 new Path(M.STRAFE, D.FORWARD, 0.5, 9),
                 new Path(M.DRIVE, D.BACKWARD, 0.4, 5),
                 new Path(M.BACK_DOWN, D.N, 0, 0),
                 new Path(M.ROTATE, D.FORWARD, 0.55, 180),
-                new Path(M.DRIVE, D.BACKWARD, 0.5, 19),
+                new Path(M.DRIVE, D.BACKWARD, 0.5, 24),
                 new Path(M.BACK_UP, D.N, 0, 0),
                 new Path(M.DRIVE, D.FORWARD, 0.5, 3),
                 new Path(M.STRAFE, D.FORWARD,0.7, 48),
                 new Path(M.DRIVE, D.FORWARD, 0.5, 10)
         };
+        driver.skystonePos(0.2);
         driver.parseMoves(paths);
     }
 }

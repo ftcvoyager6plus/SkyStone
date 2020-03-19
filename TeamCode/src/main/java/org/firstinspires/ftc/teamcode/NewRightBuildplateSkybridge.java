@@ -28,6 +28,7 @@ public class NewRightBuildplateSkybridge extends LinearOpMode {
                 new Path(M.STRAFE, D.BACKWARD, 0.5, 45),
                 new Path(M.DRIVE, D.FORWARD, 0.5, 15)
         };
+        driver.skystonePos(0.2);
         driver.parseMoves(paths);
     }
 }

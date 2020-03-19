@@ -60,6 +60,9 @@ public class Teleop1P extends LinearOpMode {
     private static final double DMAX_POS = 1.0;
     private static final double DMIN_POS = 0.0;
     private double dposition = (DMAX_POS - DMIN_POS) / 2;
+    private double frontIsSkystone;
+    private double backIsSkystone;
+    int front_red, front_green, front_blue, back_red, back_green, back_blue;
 
     VoyagerBot robot = new VoyagerBot();
     //Detecting detector = null;
@@ -67,6 +70,7 @@ public class Teleop1P extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
         //detector = new Detecting(this, robot);
+        robot.resetEncoders();
         telemetry.addData("Status", "Ready");
         telemetry.update();
         waitForStart();
@@ -91,12 +95,11 @@ public class Teleop1P extends LinearOpMode {
             }
             if(bumper_left) {
                 robot.lift.setPower(1.0);
-            } else {
-                robot.lift.setPower(0);
             }
             if(bumper_right) {
                 robot.lift.setPower(-1);
-            } else {
+            }
+            if(!bumper_left && !bumper_right) {
                 robot.lift.setPower(0);
             }
             if(button_a) {
@@ -142,12 +145,11 @@ public class Teleop1P extends LinearOpMode {
             }
             if(gamepad2.dpad_down) {
                 robot.extension.setPower(0.3);
-            } else {
-                robot.extension.setPower(0);
             }
             if(gamepad2.dpad_up) {
                 robot.extension.setPower(-0.3);
-            } else {
+            }
+            if(!gamepad2.dpad_up && !gamepad2.dpad_down) {
                 robot.extension.setPower(0);
             }
             /*if(gamepad1.y) {
@@ -190,6 +192,16 @@ public class Teleop1P extends LinearOpMode {
             } else {
                 telemetry.addData("Visible Target", "none");
             }*/
+            front_red = robot.color_front.red();
+            front_green = robot.color_front.green();
+            front_blue = robot.color_front.blue();
+            back_red = robot.color_back.red();
+            back_green = robot.color_back.green();
+            back_blue = robot.color_back.blue();
+            frontIsSkystone = (front_red + front_green) / front_blue;
+            backIsSkystone = (back_red + back_green) / back_blue;
+            telemetry.addData("Front Skystone", frontIsSkystone);
+            telemetry.addData("Back Skystone", backIsSkystone);
             telemetry.update();
 
             /* * * * * * * * * * * *
